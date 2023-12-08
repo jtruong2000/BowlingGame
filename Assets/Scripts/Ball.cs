@@ -58,11 +58,35 @@ public class Ball : MonoBehaviour
             return;
         }
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             StartCoroutine(Shoot());
         }
 
+      
+
+        // Check if A key is pressed
+        if (Input.GetKey(KeyCode.A))
+        {
+            MoveBall(-1); // Move the ball left
+        }
+
+        // Check if D key is pressed
+        if (Input.GetKey(KeyCode.D))
+        {
+            MoveBall(1); // Move the ball right
+        }
+    }
+
+    private void MoveBall(float direction)
+    {
+        float lateralSpeed = 5f; // Adjust the speed as needed
+
+        // Calculate the new position based on the direction and speed
+        float newZPosition = transform.position.z + direction * lateralSpeed * Time.deltaTime;
+
+        // Update the ball's position
+        transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.Clamp(newZPosition, -5f, 5f));
     }
 
     private IEnumerator Shoot()
