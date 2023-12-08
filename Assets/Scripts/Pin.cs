@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -18,15 +17,40 @@ public class Pin : MonoBehaviour
             // check if the velocity has dropped below the fall threshold
             if (velocity < 10)
             {
-                var point = GameObject.FindGameObjectWithTag("Ball").GetComponent<Ball>().Point;
+                // Update points
+                int point = GameObject.FindGameObjectWithTag("Ball").GetComponent<Ball>().Point;
                 point += 1;
-                GameObject.FindGameObjectWithTag("Poing").GetComponent<TextMeshProUGUI>().text = $"Number of fallen pins: {point}";
-                GameObject.FindGameObjectWithTag("Ball").GetComponent<Ball>().Point = point;
+                
+                // Update UI
+                UpdateUI(point);
+
+                // Update high score if necessary
+                UpdateHighScore(point);
+
+                // Transfer points to the next stage (you may want to save it in a persistent manager)
+                PersistentGameManager.Instance.Points = point;
+
                 _done = true;
             }
-
-
         }
     }
 
+    private void UpdateUI(int point)
+    {
+        // Update the UI text
+        GameObject.FindGameObjectWithTag("Point").GetComponent<TextMeshProUGUI>().text = $"Number of fallen pins: {point}";
+    }
+
+    private void UpdateHighScore(int point)
+    {
+        // Check if the current score is higher than the high score
+        if (point > PersistentGameManager.Instance.HighScore)
+        {
+            // Update the high score
+            PersistentGameManager.Instance.HighScore = point;
+
+            // You may also want to update the high score UI here
+            GameObject.FindGameObjectWithTag("HighScore").GetComponent<TextMeshProUGUI>().text = $"High Score: {point}";
+        }
+    }
 }
